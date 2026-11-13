@@ -74,25 +74,33 @@ flowchart LR
 
 ## ติดตั้ง
 
-**ใช้กับทุกโปรเจกต์** (macOS / Linux / Git Bash)
+**คำสั่งเดียว**
+
+```bash
+npx skills add koravut-Dev/thai-word-check-kit
+```
+
+**คัดลอกเอง** (macOS / Linux / Git Bash)
 
 ```bash
 git clone https://github.com/koravut-Dev/thai-word-check-kit.git
 ```
 
 ```bash
-mkdir -p ~/.claude/skills && cp -r thai-word-check-kit/thai-word-check ~/.claude/skills/
+mkdir -p ~/.claude/skills && cp -r thai-word-check-kit/skills/thai-word-check ~/.claude/skills/
 ```
 
-**Windows PowerShell**
+**คัดลอกเอง** (Windows PowerShell)
 
 ```powershell
 git clone https://github.com/koravut-Dev/thai-word-check-kit.git
 New-Item -ItemType Directory -Force "$HOME\.claude\skills" | Out-Null
-Copy-Item -Recurse thai-word-check-kit\thai-word-check "$HOME\.claude\skills\thai-word-check"
+Copy-Item -Recurse thai-word-check-kit\skills\thai-word-check "$HOME\.claude\skills\thai-word-check"
 ```
 
-**ใช้เฉพาะโปรเจกต์เดียว** คัดลอกโฟลเดอร์ `thai-word-check/` ไปไว้ที่ `<โฟลเดอร์โปรเจกต์>/.claude/skills/thai-word-check/`
+**ใช้เฉพาะโปรเจกต์เดียว** คัดลอกโฟลเดอร์ `skills/thai-word-check/` ไปไว้ที่ `<โฟลเดอร์โปรเจกต์>/.claude/skills/thai-word-check/`
+
+โฟลเดอร์ของ agent อื่นดูได้ในหัวข้อ [Install](#install) ด้านล่าง
 
 เปิด session ใหม่หลังติดตั้ง สกิลจะถูกโหลดเอง
 
@@ -123,7 +131,7 @@ Copy-Item -Recurse thai-word-check-kit\thai-word-check "$HOME\.claude\skills\tha
 ## โครงสร้าง
 
 ```
-thai-word-check/
+skills/thai-word-check/
 ├── SKILL.md                      ขั้นตอนหลักและกฎ
 └── references/
     ├── glossary.md               glossary กลาง คำพ้องที่ต้องค้น รูปแบบตัวเลข/วันที่
@@ -150,3 +158,87 @@ thai-word-check/
 - Agent ที่อ่าน `SKILL.md` ได้ (ทดสอบกับ Claude Code)
 - เครื่องมือค้นข้อความในโปรเจกต์ เช่น grep หรือ ripgrep
 - ไม่มี script และไม่ส่งข้อมูลออกนอกเครื่อง สกิลเป็นไฟล์ Markdown ทั้งหมด
+
+<!-- skills:start -->
+## Skills
+
+<table>
+<tr>
+<td colspan="2" valign="top">
+
+#### thai-word-check
+
+ตรวจคำภาษาไทยก่อนเริ่ม implement — ให้ AI ใช้คำที่ระบบใช้อยู่แล้วเป็นหลัก (ปุ่ม เมนู หัวข้อ ข้อความแจ้งเตือน error ชื่อฟิลด์ ชื่อในโค้ด) เข้าใจง่ายแต่ครบถ้วน ไม่ตั้งคำใหม่โดยไม่...
+
+```bash
+npx skills add koravut-Dev/thai-word-check-kit --skill thai-word-check
+```
+
+</td>
+</tr>
+</table>
+
+## Install
+
+> [!TIP]
+> One command installs every skill in this repo into all the agents it detects.
+
+```bash
+# every skill in this repo
+npx skills add koravut-Dev/thai-word-check-kit
+
+# a single skill
+npx skills add koravut-Dev/thai-word-check-kit --skill thai-word-check
+```
+
+<details>
+<summary><b>Manual copy</b></summary>
+
+```bash
+git clone https://github.com/koravut-Dev/thai-word-check-kit.git
+cp -r thai-word-check-kit/skills/thai-word-check ~/.claude/skills/
+```
+
+| Agent | Personal | Project |
+|---|---|---|
+| Claude Code | `~/.claude/skills/` | `.claude/skills/` |
+| Codex CLI | `~/.codex/skills/` | `.agents/skills/` |
+| Others | see the tool's docs | see the tool's docs |
+
+</details>
+
+> [!IMPORTANT]
+> Skills run with the full permissions of your agent. Read a skill before you install it. Directories and CLI flags change over time, so check each tool's current documentation.
+
+## How it works
+
+```mermaid
+flowchart LR
+    A[npx skills add] --> B[Clone repo]
+    B --> C[Find SKILL.md files]
+    C --> D[Install for each agent]
+    D --> E[Claude Code]
+    D --> F[Codex]
+    D --> G[Cursor]
+    D --> H[Gemini CLI]
+```
+
+## Repo layout
+
+```text
+thai-word-check-kit/
+├── README.md
+├── LICENSE
+└── skills/
+    └── thai-word-check/SKILL.md
+```
+
+Each skill folder name equals the `name` in its `SKILL.md` frontmatter, as the Agent Skills standard requires.
+
+## Contributing
+
+1. Add or edit a skill under `skills/<name>/SKILL.md`.
+2. Keep `name` (lowercase-hyphen, equal to the folder) and `description` in the frontmatter.
+3. Never commit secrets; the publish script scans for them.
+4. Open a pull request.
+<!-- skills:end -->
